@@ -8,9 +8,12 @@ using UnityEngine.UI;
 public class GameManagerX : MonoBehaviour
 {
     public TextMeshProUGUI scoreText;
+    public TextMeshProUGUI timeText;
     public TextMeshProUGUI gameOverText;
     public GameObject titleScreen;
-    public Button restartButton; 
+    public Button restartButton;
+    public float remaningTime=60;
+
 
     public List<GameObject> targetPrefabs;
 
@@ -33,6 +36,17 @@ public class GameManagerX : MonoBehaviour
         titleScreen.SetActive(false);
     }
 
+    // To get time per second
+    private void Update()
+    {
+        if (isGameActive)
+        {
+            remaningTime -= Time.deltaTime;
+            UpdateTime(Mathf.Round(remaningTime));
+            if (Mathf.Round(remaningTime) == 0)
+                GameOver();
+        }
+    }
     // While game is active spawn a random target
     IEnumerator SpawnTarget()
     {
@@ -64,6 +78,11 @@ public class GameManagerX : MonoBehaviour
     int RandomSquareIndex()
     {
         return Random.Range(0, 4);
+    }
+    // Update Time
+    private void UpdateTime(float time)
+    {
+        timeText.text = "Time: " + time;
     }
 
     // Update score with value from target clicked
